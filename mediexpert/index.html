@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MediExpert - Medical Expert System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>❤️ MediExpert</h1>
+    <p>AI Diagnostic System — A* Search Algorithm Inference Engine</p>
+  </header>
+
+  <div class="container">
+    <div class="grid">
+      <div class="card">
+        <h2>🩺 Symptom Checker</h2>
+        <p style="font-size:0.8rem;color:#64748b;margin-bottom:8px;">Select all symptoms you are experiencing</p>
+        <div id="symptom-list"></div>
+        <button class="primary" id="diagnose-btn" disabled>Diagnose (0 selected)</button>
+      </div>
+      <div>
+        <div id="results">
+          <div style="text-align:center;padding:60px 20px;color:#94a3b8;">
+            <p style="font-size:3rem;">🧠</p>
+            <p>Select symptoms and click Diagnose</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Medical Expert System — College Practical Exam Project | A* Search Algorithm Inference Engine</footer>
+
+  <script src="js/KnowledgeBase.js"></script>
+  <script src="js/DiagnosisEngine.js"></script>
+  <script>
+    const selected = new Set();
+    const list = document.getElementById("symptom-list");
+    const btn = document.getElementById("diagnose-btn");
+    const resultsDiv = document.getElementById("results");
+
+    // Build symptom checkboxes grouped by category
+    const cats = [...new Set(SYMPTOMS.map(s => s.category))];
+    cats.forEach(cat => {
+      list.innerHTML += `<div class="category">${cat}</div>`;
+      SYMPTOMS.filter(s => s.category === cat).forEach(s => {
+        list.innerHTML += `<label class="symptom-label"><input type="checkbox" value="${s.id}"><span>${s.name}</span></label>`;
+      });
+    });
+
+    list.addEventListener("change", e => {
+      if (e.target.type !== "checkbox") return;
+      e.target.checked ? selected.add(e.target.value) : selected.delete(e.target.value);
+      btn.disabled = selected.size === 0;
+      btn.textContent = `Diagnose (${selected.size} selected)`;
+    });
+
+    btn.addEventListener("click", () => {
+      const results = diagnose([...selected]);
+      if (!results.length) { resultsDiv.innerHTML = "<p>No matching diseases found.</p>"; return; }
+
+      const sevColors = { mild: "green", moderate: "yellow", severe: "red" };
+      resultsDiv.innerHTML = `<h2 style="margin-bottom:12px;">📊 Diagnosis Results</h2>` +
+        results.map((r, i) => `
+          <div class="result-card ${i === 0 ? 'top' : ''}">
+            <div class="result-header">
+              <div>
+                ${i === 0 ? '<span class="badge badge-green">Top Match</span>' : ''}
+                <span class="badge badge-${sevColors[r.disease.severity]}">${r.disease.severity}</span>
+                <h3 style="margin:4px 0">${r.disease.name}</h3>
+                <p style="font-size:0.8rem;color:#64748b">${r.disease.description}</p>
+              </div>
+              <div style="text-align:right"><span class="confidence">${r.confidence}%</span><br><small>Confidence</small></div>
+            </div>
+            <div class="bar"><div class="bar-fill" style="width:${r.confidence}%"></div></div>
+            <div>${r.matchedSymptoms.map(s => `<span class="badge badge-green">✓ ${s}</span>`).join("")}</div>
+            <div class="scores">f(n)=${r.fScore.toFixed(2)} | g(n)=${r.gScore.toFixed(2)} | h(n)=${r.hScore.toFixed(2)}</div>
+            <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('open')">ℹ️ Why this diagnosis?</button>
+            <div class="explanation">
+              <b>A* Search Analysis:</b><br>
+              g(n) = ${r.gScore.toFixed(2)} (matched symptom weights)<br>
+              h(n) = ${r.hScore.toFixed(2)} (unmatched symptom potential)<br>
+              f(n) = ${r.fScore.toFixed(2)}<br><br>
+              <b>Matched:</b> ${r.matchedSymptoms.join(", ")}<br>
+              ${r.unmatchedSymptoms.length ? `<b>Missing:</b> ${r.unmatchedSymptoms.join(", ")}<br>` : ""}
+              <br><b>Recommendations:</b><br>${r.disease.recommendations.map(x => "• " + x).join("<br>")}
+            </div>
+          </div>`).join("") +
+        `<div class="disclaimer">⚠️ <b>Disclaimer:</b> This is an educational expert system for a college practical exam. Not a substitute for professional medical advice.</div>`;
+    });
+  </script>
+</body>
+</html>

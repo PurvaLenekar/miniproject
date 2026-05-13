@@ -1,0 +1,32 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',sans-serif; background:#f0f4f8; color:#1a202c; }
+header { background:linear-gradient(135deg,#2563eb,#1e40af); color:#fff; padding:16px 24px; }
+header h1 { font-size:1.4rem; } header p { font-size:0.8rem; opacity:0.8; }
+.container { max-width:1000px; margin:0 auto; padding:24px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+@media(max-width:768px) { .grid { grid-template-columns:1fr; } }
+.card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:20px; }
+.card h2 { font-size:1.1rem; margin-bottom:12px; color:#2563eb; }
+.category { font-size:0.7rem; font-weight:700; text-transform:uppercase; color:#64748b; margin:12px 0 6px; }
+.symptom-label { display:flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid #e2e8f0; border-radius:8px; margin:4px 0; cursor:pointer; font-size:0.85rem; transition:0.2s; }
+.symptom-label:hover { border-color:#2563eb; background:#eff6ff; }
+.symptom-label input:checked + span { color:#2563eb; font-weight:600; }
+button.primary { background:#2563eb; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-size:0.9rem; cursor:pointer; width:100%; margin-top:12px; }
+button.primary:hover { background:#1d4ed8; }
+button.primary:disabled { opacity:0.5; cursor:not-allowed; }
+.result-card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:16px; margin-bottom:12px; border-left:4px solid #2563eb; }
+.result-card.top { border-left-color:#16a34a; }
+.result-header { display:flex; justify-content:space-between; align-items:start; }
+.confidence { font-size:2rem; font-weight:800; color:#2563eb; }
+.bar { height:6px; background:#e2e8f0; border-radius:3px; margin:8px 0; }
+.bar-fill { height:100%; background:#2563eb; border-radius:3px; }
+.badge { display:inline-block; font-size:0.7rem; padding:2px 8px; border-radius:12px; margin:2px; }
+.badge-green { background:#dcfce7; color:#16a34a; }
+.badge-red { background:#fee2e2; color:#dc2626; }
+.badge-yellow { background:#fef9c3; color:#a16207; }
+.scores { font-size:0.75rem; color:#64748b; margin:6px 0; }
+.explanation { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; margin-top:8px; font-size:0.8rem; display:none; }
+.explanation.open { display:block; }
+.toggle-btn { background:none; border:none; color:#2563eb; cursor:pointer; font-size:0.8rem; margin-top:6px; }
+.disclaimer { background:#fef3c7; border-radius:8px; padding:12px; font-size:0.8rem; margin-top:16px; color:#92400e; }
+footer { text-align:center; font-size:0.75rem; color:#94a3b8; padding:20px; }
